@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .navbar {
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            color: #fff;
+            border-radius: 5px;
+            position: sticky;
+            top: 0;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #000;
+            font-family: garamond;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .nav-links li {
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .btn {
+            padding: 0.3rem 0.2rem;
+            background-color: #0d151f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #0d151f;
+        }
+
+        .btn-primary:hover {
+            background-color: #bea800;
+        }
+    </style>
+</head>
+<body style="background-color: #bea800;">
+        <header>
+            <nav class="navbar">
+                <div class="container">
+                    <a href="#" class="logo">Click It Up</a>
+                    <ul style="margin-left: 45%; display: flex;" class="nav-links">
+                        <li><a style="color: #000;" href="#home">Home</a></li>
+                        <li><a style="color: #000;" href="#features">Features</a></li>
+                        <li><a style="color: #000;" href="#pricing">Pricing</a></li>
+                        <li><a style="color: #000;" href="#clients">Clients</a></li>
+                        <li><a style="color: #000;" href="#contact">Contact</a></li>
+                        <li><a href="#" class="btn btn-primary">Sign Up</a></li>
+                        <li><a href="#" class="btn btn-primary">Login</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+</body>
+</html>

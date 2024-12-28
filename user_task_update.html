@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapsible Sidebar Menu</title>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        h2 {
+            font-size: 26px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #f1f1f1;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .burger-menu {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            z-index: 1;
+        }
+
+        .burger-menu:hover {
+            color: #007BFF;
+        }
+
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .content.active {
+            margin-left: 250px;
+        }
+
+        /* Task Table Styles */
+        ul.responsive-table {
+            margin-top: 80px;
+        }
+
+        ul.responsive-table li {
+            border-radius: 3px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        ul.responsive-table .table-header {
+            background-color: #95A5A6;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        ul.responsive-table .table-row {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        ul.responsive-table .col {
+            flex-basis: 25%;
+            cursor: pointer;
+        }
+
+        ul.responsive-table .dropdown {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        ul.responsive-table .dropdown button {
+            display: block;
+            width: 100%;
+            padding: 5px 10px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        ul.responsive-table .dropdown button:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media all and (max-width: 767px) {
+            ul.responsive-table .table-header {
+                display: none;
+            }
+
+            ul.responsive-table li {
+                display: block;
+            }
+
+            ul.responsive-table .col {
+                flex-basis: 100%;
+            }
+
+            ul.responsive-table .col:before {
+                color: #6C7A89;
+                padding-right: 10px;
+                content: attr(data-label);
+                flex-basis: 50%;
+                text-align: right;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Burger Menu -->
+    <div class="burger-menu" onclick="toggleSidebar()">☰</div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <a href="#home">Home</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#profile">Profile</a>
+        <a href="#settings">Settings</a>
+        <a href="#logout">Logout</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="container">
+            <h2>Assigned Tasks</h2>
+            <ul class="responsive-table">
+                <li class="table-header">
+                    <div class="col col-1">Sr no</div>
+                    <div class="col col-2">Issue</div>
+                    <div class="col col-3">Due Date</div>
+                    <div class="col col-4">Completion Status</div>
+                </li>
+                <li class="table-row">
+                    <div class="col col-1" data-label="Sr no">1</div>
+                    <div class="col col-2" data-label="Issue">Task 1</div>
+                    <div class="col col-3" data-label="Due Date">12-23-2024</div>
+                    <div class="col col-4" data-label="Completion Status" onclick="toggleDropdown(event)">Pending</div>
+                </li>
+                <li class="table-row">
+                    <div class="col col-1" data-label="Sr no">2</div>
+                    <div class="col col-2" data-label="Issue">Task 2</div>
+                    <div class="col col-3" data-label="Due Date">12-24-2024</div>
+                    <div class="col col-4" data-label="Completion Status" onclick="toggleDropdown(event)">Completed</div>
+                </li>
+            </ul>
+            <div class="dropdown">
+                <button onclick="setStatus(event, 'Pending')">Pending</button>
+                <button onclick="setStatus(event, 'In Progress')">In Progress</button>
+                <button onclick="setStatus(event, 'Completed')">Completed</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector(".sidebar").classList.toggle("active");
+            document.querySelector(".content").classList.toggle("active");
+        }
+
+        function toggleDropdown(event) {
+            const dropdown = document.querySelector(".dropdown");
+            dropdown.style.display = "block";
+            dropdown.style.left = `${event.clientX}px`;
+            dropdown.style.top = `${event.clientY}px`;
+            dropdown.setAttribute("data-target", event.target.dataset.label);
+        }
+
+        function setStatus(event, status) {
+            const dropdown = document.querySelector(".dropdown");
+            const target = dropdown.getAttribute("data-target");
+            const cell = document.querySelector(`[data-label="${target}"]`);
+            cell.innerHTML = status;
+            dropdown.style.display = "none";
+        }
+
+        document.addEventListener("click", (event) => {
+            const dropdown = document.querySelector(".dropdown");
+            if (!dropdown.contains(event.target) && dropdown.style.display === "block") {
+                dropdown.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapsible Sidebar Menu with Task Cards</title>
+    <style>
+        body {
+            font-family: "Lato", sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 26px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #333;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #f1f1f1;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .burger-menu {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            z-index: 1;
+        }
+
+        .burger-menu:hover {
+            color: #007BFF;
+        }
+
+        .content {
+            margin-left: 0;
+            transition: margin-left 0.3s;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .content.active {
+            margin-left: 250px;
+        }
+
+        /* Task Cards Styles */
+        .task-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .task-card {
+            flex: 1;
+            min-width: 300px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .task-card h3 {
+            margin: 0 0 15px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .task-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-card li {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .task-card li span {
+            font-weight: bold;
+        }
+
+        /* Completed, Pending, and In-Progress Styles */
+        .completed {
+            color: #28a745;
+        }
+
+        .pending {
+            color: #dc3545;
+        }
+
+        .in-progress {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Burger Menu -->
+    <div class="burger-menu" onclick="toggleSidebar()">☰</div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <a href="#home">Home</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#profile">Profile</a>
+        <a href="#settings">Settings</a>
+        <a href="#logout">Logout</a>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="container">
+            <h2>Assigned Tasks</h2>
+
+            <!-- Task Cards Section -->
+            <div class="task-cards">
+                <!-- Completed Tasks -->
+                <div class="task-card">
+                    <h3>Completed Tasks</h3>
+                    <ul>
+                        <li><span>Task 1</span> <span class="completed">Completed</span></li>
+                        <li><span>Task 2</span> <span class="completed">Completed</span></li>
+                    </ul>
+                </div>
+
+                <!-- Pending Tasks -->
+                <div class="task-card">
+                    <h3>Pending Tasks</h3>
+                    <ul>
+                        <li><span>Task 3</span> <span class="pending">Pending</span></li>
+                        <li><span>Task 4</span> <span class="pending">Pending</span></li>
+                    </ul>
+                </div>
+
+                <!-- In-Progress Tasks -->
+                <div class="task-card">
+                    <h3>In-Progress Tasks</h3>
+                    <ul>
+                        <li><span>Task 5</span> <span class="in-progress">In Progress</span></li>
+                        <li><span>Task 6</span> <span class="in-progress">In Progress</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.querySelector(".sidebar").classList.toggle("active");
+            document.querySelector(".content").classList.toggle("active");
+        }
+    </script>
+</body>
+</html>
