@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Employee Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: "Lato", sans-serif;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #333;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            padding-top: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h2 {
+            font-size: 26px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .salary-breakdown, .attendance-chart {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .salary-breakdown ul, .attendance-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .salary-breakdown li, .attendance-details li {
+            margin-bottom: 10px;
+        }
+
+        .salary-breakdown .label, .attendance-details .label {
+            font-weight: bold;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 400px;
+        }
+
+        @media all and (max-width: 767px) {
+            .salary-breakdown, .attendance-chart {
+                margin: 10px;
+            }
+        }
+
+        .attendance-chart {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .mark-attendance {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .attendance-form p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        #markAttendanceBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #markAttendanceBtn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="#"><i class="fas fa-tasks"></i> Tasks</a>
+        <a href="#"><i class="fas fa-user"></i> Profile</a>
+        <a href="#"><i class="fas fa-calendar-check"></i> Salary and Attendance</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="container">
+            <!-- Mark Today's Attendance -->
+            <div class="section mark-attendance">
+                <h2>Mark Today's Attendance</h2>
+                <div class="attendance-form">
+                    <p>Date: <span id="currentDate"></span></p>
+                    <p>Time: <span id="currentTime"></span></p>
+                    <button id="markAttendanceBtn" onclick="markAttendance()">Mark Attendance</button>
+                </div>
+            </div>
+
+            <!-- Salary Breakdown -->
+            <div class="section salary-breakdown">
+                <h2>Salary Breakdown</h2>
+                <ul>
+                    <li><span class="label">Basic Pay:</span> 3,500</li>
+                    <li><span class="label">Housing Allowance:</span> 800</li>
+                    <li><span class="label">Transportation Allowance:</span> 300</li>
+                    <li><span class="label">Other Allowances:</span> 400</li>
+                    <li><span class="label">Deductions:</span> -250</li>
+                    <li><span class="label">Final Salary:</span> 4,650</li>
+                </ul>
+            </div>
+
+            <!-- Attendance Details -->
+            <div class="section attendance-chart">
+                <h2>Attendance</h2>
+                <div class="attendance-details">
+                    <ul>
+                        <li><span class="label">Total Leaves:</span> 30 days</li>
+                        <li><span class="label">Paid Leaves:</span> 15 days</li>
+                        <li><span class="label">Total Paid Leaves Taken:</span> 10 days</li>
+                        <li><span class="label">Total Days Attended:</span> 220 days</li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to display today's date and time
+        window.onload = function() {
+            const currentDate = new Date();
+            const dateStr = currentDate.toLocaleDateString(); // Format: MM/DD/YYYY
+            const timeStr = currentDate.toLocaleTimeString(); // Format: HH:MM:SS AM/PM
+
+            document.getElementById('currentDate').textContent = dateStr;
+            document.getElementById('currentTime').textContent = timeStr;
+        };
+
+        // Function to mark attendance
+        function markAttendance() {
+            const currentDate = new Date();
+            const dateStr = currentDate.toLocaleDateString();
+            const timeStr = currentDate.toLocaleTimeString();
+
+            // For now, just log the attendance date and time to the console
+            console.log(`Attendance marked for ${dateStr} at ${timeStr}`);
+            alert(`Attendance marked for ${dateStr} at ${timeStr}`);
+        }
+
+        // Pie chart for attendance details
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Paid Leaves Taken', 'Unpaid Leaves Taken', 'Days Attended'],
+                datasets: [{
+                    label: 'Attendance Breakdown',
+                    data: [10, 5, 220], // Data for Paid Leaves, Unpaid Leaves, and Days Attended
+                    backgroundColor: ['#4CAF50', '#FFEB3B', '#2196F3'],
+                    borderColor: ['#388E3C', '#FBC02D', '#1976D2'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' days';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
